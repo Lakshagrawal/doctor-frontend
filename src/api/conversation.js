@@ -5,7 +5,7 @@ export const getConversations = async () => {
     const response = await fetch(API_URL, {
         method: 'GET',
         headers: {
-            Authorization: `Bearer ${token}`,
+            authorization: `${token}`,
         }
     });
     return response.json();

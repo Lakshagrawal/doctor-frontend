@@ -21,3 +21,4 @@ export const register = async (data) => {
     });
     return response.json();
 };
+    

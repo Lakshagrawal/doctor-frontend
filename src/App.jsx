@@ -13,10 +13,12 @@ function App() {
             <Navbar />
 
             <Routes>
+                <Route path="/" element={<Login />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Register />} />
+                <Route path="/signup" element={<Register title="Signup" />} />
                 <Route path="/conversations" element={<ConversationsList />} />
-                <Route path="/conversation/:id" element={<MessageBox />} />
+                <Route path="/conversations/:conversationId" element={<MessageBox />} />
+                <Route path="/create/user" element={<Register title="Create User" />} />
             </Routes>
         </Router>
     );
