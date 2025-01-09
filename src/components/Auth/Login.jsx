@@ -5,11 +5,18 @@ const apiUrl = import.meta.env.VITE_API_URL;
 function Login() {
     const [number, setNumber] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
+            if (!number || !password) {
+                setError('Please fill in all fields');
+                return;
+            }
             const response = await fetch(`${apiUrl}/auth/login`, {
                 method: 'POST',
                 headers: {
@@ -25,10 +32,12 @@ function Login() {
                 localStorage.setItem('is_admin', data.user.is_admin);
                 navigate('/conversations');
             } else {
-                alert('Login failed!');
+                setError('Invalid credentials');
             }
         } catch (error) {
             alert('Login failed!');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -74,8 +83,10 @@ function Login() {
                             className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
                     <button
                         type="submit"
+                        disabled={loading}
                         className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 transition"
                     >
                         Login
