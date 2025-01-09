@@ -6,11 +6,18 @@ import { Link, useNavigate } from 'react-router-dom';
 function ConversationsList() {
     const [conversations, setConversations] = useState([]);
     const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         const fetchConversations = async () => {
-            const token = localStorage.getItem('token');
-            const userId = localStorage.getItem('userId');
+
+            // Check if token or userId is missing
+            if (!token || !userId) {
+                handleInvalidToken();
+                navigate('/login');
+                return;
+            }
 
             const response = await fetch(`${apiUrl}/conversations/${userId}`, {
                 method: 'GET',
@@ -45,12 +52,13 @@ function ConversationsList() {
                             className="bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition"
                         >
                             <h3 className="text-lg font-semibold text-gray-900">
-                                Hello User: {conv?.user2_id}
+                                User: {conv?.name}
                             </h3>
-                            <p className="text-gray-600 text-sm mt-1">
+                            {/* <p className="text-gray-600 text-sm mt-1">
                                 Conversation ID: {conv?.conversation_id}
-                            </p>
-                            <p className="text-gray-700 mt-2">{conv?.last_message}</p>
+                            </p> */}
+                            <p className="text-gray-700 mt-2">
+                            Last Message: {conv?.last_message}</p>
                             <Link
                                 to={`/conversations/${conv?.conversation_id}`}
                                 className="inline-block mt-4 text-indigo-600 font-medium hover:underline"
